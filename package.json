@@ -1,0 +1,27 @@
+{
+  "name": "gofundme_scraper",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nathanrosspowell/gofundme_scraper.git"
+  },
+  "author": "Nathan Ross Powell <nathanrosspowell@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/nathanrosspowell/gofundme_scraper/issues"
+  },
+  "dependencies": {
+    "cheerio": "latest",
+    "express": "latest",
+    "https": "^1.0.0",
+    "phantom": "^2.0.4",
+    "phantomjs": "^2.1.3",
+    "request": "latest"
+  },
+  "homepage": "https://github.com/nathanrosspowell/gofundme_scraper"
+}
