@@ -6,8 +6,8 @@ GoFundMe(input, function(data){
     console.log("Title: ", data.title);
     console.log("Raised: " + data.currency.toString() + data.amount.toString() + " of " + data.currency.toString() + data.goal.toString());
     console.log("Percentage: " + data.percentage.toString())
-    console.log("Donors: ");
-    for ( i in data.donors ) {
+    console.log("Donors: " + data.donations.toString());
+    for ( var i in data.donors ) {
         console.log("   " + i + ". " + data.donors[i].name + " - " + data.donors[i].amount)
     }
 });

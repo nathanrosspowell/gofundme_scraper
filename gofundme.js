@@ -22,19 +22,22 @@ function getNumber(value) {
 
 function getDonorData(html) {
     var $ = cheerio.load(html);
+    var donations = parseInt($('div > div.donerscroll > span:nth-child(4)').text());
+    donations += 1; 
     var nums = $('div > div.donerscroll > span:nth-child(3)').text();
     var startNum = parseInt(nums.split("-")[0])
     var i = 0;
     var donors = {}
+    console.log(donations);
     $('div.doner').each(function(index, element){
-        var index = (startNum + i ) 
+        var index = donations - (startNum + i )
         var amountHtml = $(element).find("div.damt").text()
         var numb = amountHtml.match(/\d/g);
         var amount = parseInt(numb.join(""))
         donors[index] = {
             "name" : $(element).find("div.dname").text(),
             "message" : $(element).find("div.dcom").text(),
-            "amount" : amount
+            "amount" : amount,
         }
         i += 1;
     });
@@ -83,6 +86,7 @@ function goFundMe(input, callback) {
                             currency = $('div.raised > span.cur').text(),
                             goal = $('div.raised > span.goal').text().replace(currency, ""),
                             goalNumber = getNumber(goal),
+                            donations = parseInt($('div.donate_right > div > div.donerscroll > span:nth-child(4)').text());
                             amountHtml = $("div.raised").text()
                     var numb = amountHtml.split('of')[0].match(/\d/g);
                     var amount = parseInt(numb.join(""))
@@ -92,7 +96,6 @@ function goFundMe(input, callback) {
                         page.close();
                         ph.exit();
                         if ( callback !== "undefined" ) {
-                            
                             var data = {
                                 title: title,
                                 currency: currency,
@@ -100,6 +103,7 @@ function goFundMe(input, callback) {
                                 amountNumber: amountNumber,
                                 goal: goal,
                                 goalNumber: goalNumber,
+                                donations: donations,
                                 percentage: percentage,
                                 donors: donors
                             }
