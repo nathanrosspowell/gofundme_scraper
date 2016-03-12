@@ -1,7 +1,7 @@
 var phantom = require('phantom');
 var cheerio = require('cheerio');
 
-var goFundMeURL = 'https://www.gofundme.com/ShowerFlint5' // 'https://www.gofundme.com/39t6wr3c'
+var goFundMeURL = 'https://www.gofundme.com/39t6wr3c'
 
 function logNames(html) {
     //console.log(html);
