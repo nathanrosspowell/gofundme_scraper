@@ -19,10 +19,8 @@ function logNames(html) {
             "message" : $(element).find("div.dcom").text(),
             "amount" : amount
         }
-        console.log("  " + index + " : "  + donators[index].name );
         i += 1;
     });
-    console.log( "....")
     return donators
 }
 
@@ -65,9 +63,7 @@ function getDonators(goFundMeURL, callback) {
                 page.property('content').then(function(content) {
                     var $ = cheerio.load(content);
                     var title = $('.pagetitle').text();
-                    console.log("Campaign: "+ title + "\n\nDonators:");
                     recurseNames(page, function(donators){
-                        console.log("Finished");
                         page.close();
                         ph.exit();
                         if ( callback !== "undefined" ) {
