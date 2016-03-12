@@ -1,21 +1,36 @@
 var phantom = require('phantom');
 var cheerio = require('cheerio');
+var merge = require('merge'), original, cloned;
 
 function logNames(html) {
     //console.log(html);
     var $ = cheerio.load(html);
-    console.log($('div > div.donerscroll > span:nth-child(3)').text());
-    $('div > div.dname').each(function(index, element){
-        console.log("  " + $(element).text())
+    var nums = $('div > div.donerscroll > span:nth-child(3)').text();
+    var startNum = parseInt(nums.split("-")[0])
+    var i = 0;
+    var donators = {}
+    $('div.doner').each(function(index, element){
+        var index = (startNum + i ) 
+        var amountHtml = $(element).find("div.damt").text()
+        var numb = amountHtml.match(/\d/g);
+        var amount = parseInt(numb.join(""))
+        donators[index] = {
+            "name" : $(element).find("div.dname").text(),
+            "message" : $(element).find("div.dcom").text(),
+            "amount" : amount
+        }
+        console.log("  " + index + " : "  + donators[index].name );
+        i += 1;
     });
     console.log( "....")
+    return donators
 }
 
-function recurseNames(page, callback) {
+function recurseNames(page, callback, preDonators) {
     page.evaluate(function() {
         return document.querySelector('div[class="donate_right"]').innerHTML
     }).then(function(html){
-        logNames(html);
+        var donators = merge(logNames(html), preDonators);
         page.evaluate(function(){
             var a = document.querySelector("div > div.donerscroll > a.lr.pright.donationsPage");
             var finished = a === null;
@@ -32,18 +47,18 @@ function recurseNames(page, callback) {
                     page.evaluate(function() {
                         return document.querySelector('div[class="donate_right"]').innerHTML;
                     }).then(function(html){
-                        recurseNames(page, callback);
+                        recurseNames(page, callback, donators);
                     });
                 }, 500);
             }
             else{
-                callback();
+                callback(donators);
             }
         });
     });
 }
 
-var Scrape = function scrape(goFundMeURL, callback) {
+function getDonators(goFundMeURL, callback) {
     phantom.create().then(function(ph) {
         ph.createPage().then(function(page) {
             page.open(goFundMeURL).then(function(status) {
@@ -51,12 +66,12 @@ var Scrape = function scrape(goFundMeURL, callback) {
                     var $ = cheerio.load(content);
                     var title = $('.pagetitle').text();
                     console.log("Campaign: "+ title + "\n\nDonators:");
-                    recurseNames(page, function(results){
+                    recurseNames(page, function(donators){
                         console.log("Finished");
                         page.close();
                         ph.exit();
                         if ( callback !== "undefined" ) {
-                            callback(results)
+                            callback(donators)
                         }
                     });
                 });
@@ -65,5 +80,4 @@ var Scrape = function scrape(goFundMeURL, callback) {
     });
 }
 
-module.exports = Scrape
-
+module.exports = getDonators
