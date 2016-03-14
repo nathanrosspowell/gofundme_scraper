@@ -1,6 +1,8 @@
 var GoFundMe = require('./gofundme');
 var input = {
-    url: 'https://www.gofundme.com/39t6wr3c' // 'https://www.gofundme.com/samyancey' //'https://www.gofundme.com/ShowerFlint5' 
+    //url: 'https://www.gofundme.com/39t6wr3c',
+    url: 'https://www.gofundme.com/tprseancullen',
+    lastCount:0
 }
 GoFundMe(input, function(data){
     console.log("Title: ", data.title);
